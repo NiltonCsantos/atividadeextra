@@ -54,7 +54,6 @@ public class ListaDupEnc<T extends Comparable<T>> extends Lista<T>{
             this.inicio=novoDado;
             this.tamanho++;
         }else{
-
             NoDuplo<T> aux= this.inicio;
 
              for (int i = 0; i <this.tamanho-1 ; i++) {
@@ -81,10 +80,10 @@ public class ListaDupEnc<T extends Comparable<T>> extends Lista<T>{
 
         NoDuplo<T> aux= new NoDuplo<>(elemento);
 
-        if(this.inicio==null){
+        if(posicao==0 && this.tamanho==0){
 
             this.inicio=aux;
-            this.tamanho++;
+            setTamanho(this.tamanho+1);
 
         } else if (posicao==0 && this.tamanho>0) {
 
@@ -94,25 +93,32 @@ public class ListaDupEnc<T extends Comparable<T>> extends Lista<T>{
 
             this.inicio=aux;
 
-            this.tamanho++;
+            setTamanho(this.tamanho+1);
 
-        }  else{
+        } else  if (posicao>=this.tamanho || posicao<0){
+
+            throw new Exception("posição inválida!");
+
+        }else{
 
             NoDuplo<T> novoDado= new NoDuplo<>(elemento);
 
             NoDuplo<T> anterior= null;
 
+
             aux=this.inicio;
 
-            for (int i = 0; i<posicao-1 ; i++) {
+            for (int i = 0; i<posicao ; i++) {
+
+                if (i==posicao-1){
+
+                    anterior=aux;
+
+                }
 
                 aux=aux.prox;
 
             }
-
-            anterior=aux;
-
-            aux=aux.prox;
 
             anterior.prox= novoDado;
             novoDado.ant=anterior;
@@ -121,14 +127,6 @@ public class ListaDupEnc<T extends Comparable<T>> extends Lista<T>{
             aux.ant=novoDado;
 
             this.tamanho++;
-
-        }
-
-
-
-        if (posicao>=this.tamanho || posicao<0){
-
-            throw new Exception("posição inválida!");
 
         }
 
@@ -169,22 +167,10 @@ public class ListaDupEnc<T extends Comparable<T>> extends Lista<T>{
     @Override
     public Lista<T> subLista(int posInicial, int posFinal) throws Exception {
 
-        if (posInicial>= this.tamanho || posFinal>= this.tamanho){
-            throw new Exception("indíce inválido!");
-        }
-
-        if (posInicial<0 || posFinal<0){
-            throw new Exception("indíce inválido!");
-        } else if (posInicial>posFinal) {
-            throw new Exception("indíce inválido!");
-        }
-
-
-        Lista listaAuxliar = new ListaDupEnc();
-
         NoDuplo<T> aux= this.inicio;
         int count=0;
 
+        Lista listaAuxliar = new ListaDupEnc();
 
         for (int i = 0; i <posInicial ; i++) {
 
@@ -193,12 +179,14 @@ public class ListaDupEnc<T extends Comparable<T>> extends Lista<T>{
         }
 
 
+
         for (int i = posInicial; i <=posFinal ; i++) {
 
             listaAuxliar.incluir(aux.dado);
             aux=aux.prox;
 
         }
+
 
         return listaAuxliar;
     }
@@ -221,7 +209,5 @@ public class ListaDupEnc<T extends Comparable<T>> extends Lista<T>{
 
         }
     }
-
-
 }
 
